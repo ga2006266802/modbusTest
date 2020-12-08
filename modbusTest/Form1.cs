@@ -15,7 +15,7 @@ namespace modbusTest
     public partial class Form1 : Form
     {
         
-        SerialPort serialPort = new SerialPort();
+        SerialPort serialPort = new SerialPort(/*"123", 19200, Parity.Even, 8*/);
 
         public Form1()
         {
@@ -65,7 +65,7 @@ namespace modbusTest
                         serialPort.Parity = Parity.Odd;
                         break;
                     case "Even":
-                            serialPort.Parity = Parity.Even;
+                        serialPort.Parity = Parity.Even;
                         break;
                 }
                 serialPort.DataBits = Convert.ToInt32(DataBitsComboBox.SelectedItem);
@@ -81,7 +81,7 @@ namespace modbusTest
                         serialPort.StopBits = StopBits.Two;
                         break;
                 }
-                
+
                 serialPort.ReadTimeout = 500;
                 serialPort.WriteTimeout = 500;
                 serialPort.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
@@ -299,7 +299,7 @@ namespace modbusTest
         {
 
             String[] calText = DataTextComboBox.Text.Split(' ');
-            String putText = DataTextComboBox.Text.ToUpper();
+            String putText = ""; //存放發送的字串 並顯示於DataTextComboBox和PutTextBox
             ArrayList putData = new ArrayList();
 
             foreach (String i in calText)
@@ -309,17 +309,31 @@ namespace modbusTest
                     MessageBox.Show("溢位", "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
                 }
-                putData.Add(String2Hex(i.ToUpper()));
+
+                String temp;
+                temp = i;
+
+                if (i.CompareTo(" ") != -1)
+                {
+                    if (i.Length == 1)
+                    {
+                        temp = '0' + temp;
+                    }
+                    putText += temp + ' ';
+                    putData.Add(String2Hex(temp.ToUpper()));
+                }
             }
+
+            putText = putText.Substring(0,putText.Length-1);
 
             for(UInt16 i = 0; i <= DataTextComboBox.Items.Count; i++) {
                 if (i == DataTextComboBox.Items.Count)
                 {
-                    DataTextComboBox.Items.Add(DataTextComboBox.Text);
+                    DataTextComboBox.Items.Add(putText);
                     break;
                 }
                 
-                if (DataTextComboBox.Text == DataTextComboBox.Items[i].ToString()) {
+                if (putText == DataTextComboBox.Items[i].ToString()) {
                    break;
                 }
             }
