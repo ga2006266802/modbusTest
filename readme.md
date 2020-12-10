@@ -8,4 +8,4 @@
 
 ![github](https://github.com/ga2006266802/modbusTest/blob/master/demoImg/demo.png)
 
-[exe](https://github.com/ga2006266802/modbusTest/blob/master/modbusTest.exe)
+[download exe](https://github.com/ga2006266802/modbusTest/blob/master/modbusTest.exe)
